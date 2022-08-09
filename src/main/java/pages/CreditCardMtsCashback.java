@@ -28,6 +28,10 @@ public class CreditCardMtsCashback {
 
     private final By CONFIRM_PHONE_NUMBER = By.xpath("//h4[@class='Wrapper-sc-6nwvzq-0 kRJvZg styled__Subheading-hs9eb9-0 eBFccf']");
 
+    private final By INPUT_ALLOW_PROCESSING_CONDITIONS = By.xpath("(//div[@class='Wrapper-sc-cb89gg-0 bfTvzg'])[1]");
+
+    private final By INPUT_ALLOW_RECEIVE_INFO_FROM_BANK = By.xpath("(//div[@class='Wrapper-sc-cb89gg-0 bfTvzg'])[2]");
+
     public void openPage(String page){
         open(page);
     }

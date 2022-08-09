@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@Builder(setterPrefix = "set")
+@Builder(builderMethodName = "Builder", setterPrefix = "set")
 public class User {
 
     private String fio;

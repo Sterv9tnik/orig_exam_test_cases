@@ -13,6 +13,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class CreditCardMtsCashbackSteps {
@@ -37,12 +38,40 @@ public class CreditCardMtsCashbackSteps {
         $(creditCardMtsCashback.getBUTTON_NEXT()).click();
     }
 
+    @Step("Нажать галочку на ознакомление с обработкой персональных данных")
+    public void clickOnInputAllowProcessingConditions(CreditCardMtsCashback creditCardMtsCashback){
+        $(creditCardMtsCashback.getINPUT_ALLOW_PROCESSING_CONDITIONS()).click();
+    }
+
+    @Step("Нажать галочку на получения рекламных предложений")
+    public void clickOnInputAllowReceiveInfoFromBank(CreditCardMtsCashback creditCardMtsCashback){
+        $(creditCardMtsCashback.getINPUT_ALLOW_RECEIVE_INFO_FROM_BANK()).click();
+    }
+
     @Step("Отправить полные данные клиента")
     public void sendClientData(CreditCardMtsCashback creditCardMtsCashback, User user){
-        $(creditCardMtsCashback.getFIO()).sendKeys(user.getFio());
-        $(creditCardMtsCashback.getBIRTH_DATE()).sendKeys(user.getBirthDate());
-        $(creditCardMtsCashback.getPHONE_NUMBER()).sendKeys(user.getPhoneNumber());
-        $(creditCardMtsCashback.getEMAIL()).sendKeys(user.getEmail());
+        if (user.getFio() != null) {
+            $(creditCardMtsCashback.getFIO()).sendKeys(user.getFio());
+        }
+
+        if (user.getBirthDate() != null) {
+            $(creditCardMtsCashback.getBIRTH_DATE()).sendKeys(user.getBirthDate());
+        }
+
+        if (user.getPhoneNumber() != null) {
+            $(creditCardMtsCashback.getPHONE_NUMBER()).sendKeys(user.getPhoneNumber());
+        }
+
+        if (user.getEmail() != null) {
+            $(creditCardMtsCashback.getEMAIL()).sendKeys(user.getEmail());
+        }
+    }
+
+    @Step("Проверка ожидания смс на телефон")
+    public void checkSuccesGetCard(CreditCardMtsCashback creditCardMtsCashback){
+        String smsText = $(creditCardMtsCashback.getCONFIRM_PHONE_NUMBER()).shouldBe(Condition.visible).getText();
+
+        assertEquals("Подтвердите номер телефона", smsText);
     }
 
     @Step("Проверка предупрежедений о незаполненных полях")
@@ -55,18 +84,26 @@ public class CreditCardMtsCashbackSteps {
     }
 
     @Step("Проверить некорректный ввод ФИО")
-    public void checkFioAttention(CreditCardMtsCashback creditCardMtsCashback){
+    public void checkFioLangAttention(CreditCardMtsCashback creditCardMtsCashback){
         SelenideElement attentionFio = $(creditCardMtsCashback.getATTENTION_TEXT());
 
         assertEquals("Используйте только кириллицу", attentionFio.getText());
     }
 
-    @Step("Проверить некорректный ввод даты рождения")
-    public void checkInvalidBirthDateAttention(CreditCardMtsCashback creditCardMtsCashback){
+    @Step("Проверить дату рождения меньше 20 лет")
+    public void checkLessThanTwentyBirthDateAttention(CreditCardMtsCashback creditCardMtsCashback){
         SelenideElement attentionBirthDate = $(creditCardMtsCashback.getATTENTION_TEXT());
 
         assertEquals("Возраст клиента должен быть не менее 20 лет", attentionBirthDate.getText());
     }
+
+    @Step("Проверить дату рождения больше 70 лет")
+    public void checkMoreThanSeventyBirthDateAttention(CreditCardMtsCashback creditCardMtsCashback) {
+        SelenideElement attentionBirthDate = $(creditCardMtsCashback.getATTENTION_TEXT());
+
+        assertEquals("Возраст клиента должен быть до 70 лет", attentionBirthDate.getText());
+    }
+
 
     @Step("Проверить некорректный ввод почты")
     public void checkInvalidEmailAttention(CreditCardMtsCashback creditCardMtsCashback){
@@ -75,10 +112,33 @@ public class CreditCardMtsCashbackSteps {
         assertEquals("Введите верный электронный адрес", attentionEmail.getText());
     }
 
-    @Step("Проверка ожидания смс на телефон")
-    public void checkSuccesGetCard(CreditCardMtsCashback creditCardMtsCashback){
-        String smsText = $(creditCardMtsCashback.getCONFIRM_PHONE_NUMBER()).shouldBe(Condition.visible).getText();
+    public void checkFioFullAttention(CreditCardMtsCashback creditCardMtsCashback){
+        SelenideElement attentionFio = $(creditCardMtsCashback.getATTENTION_TEXT());
 
-        assertEquals("Подтвердите номер телефона", smsText);
+        assertEquals("Введите ФИО полностью", attentionFio.getText());
+    }
+
+    public void checkBirthdateImportnatAttention(CreditCardMtsCashback creditCardMtsCashback){
+        SelenideElement attentionBirthDate = $(creditCardMtsCashback.getATTENTION_TEXT());
+
+        assertEquals("Обязательное поле", attentionBirthDate.getText());
+    }
+
+    public void checkPhoneNumberIncorrectAttention(CreditCardMtsCashback creditCardMtsCashback){
+        SelenideElement attentionFio = $(creditCardMtsCashback.getATTENTION_TEXT());
+
+        assertEquals("Введите верный номер телефона", attentionFio.getText());
+    }
+
+    public void checkEmptyPhoneNumberImportnatAttention(CreditCardMtsCashback creditCardMtsCashback){
+        SelenideElement attentionFio = $(creditCardMtsCashback.getATTENTION_TEXT());
+
+        assertEquals("Обязательное поле", attentionFio.getText());
+    }
+
+    public void checkInputAllowProcessingConditions(CreditCardMtsCashback creditCardMtsCashback){
+        SelenideElement allowProcessingConditions = $(creditCardMtsCashback.getATTENTION_TEXT());
+
+        assertEquals("Установите этот флажок", allowProcessingConditions.getText());
     }
 }
