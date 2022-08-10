@@ -1,5 +1,7 @@
+import com.codeborne.selenide.Configuration;
 import entity.User;
 import helper.BirthDates;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import io.qameta.allure.Description;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +14,6 @@ import pages.CreditCardMtsCashback;
 import steps.CreditCardMtsCashbackSteps;
 
 import static com.codeborne.selenide.Selenide.refresh;
-import static com.codeborne.selenide.Selenide.sleep;
 
 public class CreditCardTest {
 
@@ -20,17 +21,13 @@ public class CreditCardTest {
 
     CreditCardMtsCashbackSteps creditCardMtsCashbackSteps = new CreditCardMtsCashbackSteps();
 
-/*    @BeforeAll
-    public void setUp() {
-        SelenideLogger.addListener("AllureSelenide", new AllureSelenide().screenshots(true));
+    @BeforeAll
+    public void openPageAndSetup(){
         WebDriverManager.chromedriver().driverVersion("103").setup();
         System.setProperty("chromeoptions.args", "--no-sandbox");
         Configuration.browser = "chrome";
         Configuration.headless = true;
-    }*/
 
-    @BeforeAll
-    public void openPage(){
         creditCardMtsCashback.openPage("https://www.mtsbank.ru/");
         creditCardMtsCashbackSteps.hoverToCards(creditCardMtsCashback);
         creditCardMtsCashbackSteps.clickOnCreditCards(creditCardMtsCashback);
