@@ -37,17 +37,17 @@ public class CreditCardMtsCashbackSteps {
         $(creditCardMtsCashback.getBUTTON_NEXT()).click();
     }
 
-    @Step("Нажать галочку на ознакомление с обработкой персональных данных")
+    @Step("Убрать галочку на ознакомление с обработкой персональных данных")
     public void clickOnInputAllowProcessingConditions(CreditCardMtsCashback creditCardMtsCashback){
         $(creditCardMtsCashback.getINPUT_ALLOW_PROCESSING_CONDITIONS()).click();
     }
 
-    @Step("Нажать галочку на получения рекламных предложений")
+    @Step("Убрать галочку на получения рекламных предложений")
     public void clickOnInputAllowReceiveInfoFromBank(CreditCardMtsCashback creditCardMtsCashback){
         $(creditCardMtsCashback.getINPUT_ALLOW_RECEIVE_INFO_FROM_BANK()).click();
     }
 
-    @Step("Отправить полные данные клиента")
+    @Step("Отправить данные клиента")
     public void sendClientData(CreditCardMtsCashback creditCardMtsCashback, User user){
         if (user.getFio() != null) {
             $(creditCardMtsCashback.getFIO()).sendKeys(user.getFio());
@@ -82,21 +82,21 @@ public class CreditCardMtsCashbackSteps {
         assertEquals("Обязательное поле", attentionElements.get(2).getText());
     }
 
-    @Step("Проверить некорректный ввод ФИО")
+    @Step("Проверить наличие предупреждения о некорректном вводе ФИО")
     public void checkFioLangAttention(CreditCardMtsCashback creditCardMtsCashback){
         SelenideElement attentionFio = $(creditCardMtsCashback.getATTENTION_TEXT());
 
         assertEquals("Используйте только кириллицу", attentionFio.getText());
     }
 
-    @Step("Проверить, что возраст клиента меньше 20 лет")
+    @Step("Проверить наличие предупреждения, что возраст клиента меньше 20 лет")
     public void checkLessThanTwentyBirthDateAttention(CreditCardMtsCashback creditCardMtsCashback){
         SelenideElement attentionBirthDate = $(creditCardMtsCashback.getATTENTION_TEXT());
 
         assertEquals("Возраст клиента должен быть не менее 20 лет", attentionBirthDate.getText());
     }
 
-    @Step("Проверить, что возраст клиента больше 70 лет")
+    @Step("Проверить наличие предупреждения, что возраст клиента больше 70 лет")
     public void checkMoreThanSeventyBirthDateAttention(CreditCardMtsCashback creditCardMtsCashback) {
         SelenideElement attentionBirthDate = $(creditCardMtsCashback.getATTENTION_TEXT());
 
@@ -104,42 +104,42 @@ public class CreditCardMtsCashbackSteps {
     }
 
 
-    @Step("Проверить некорректный ввод почты")
+    @Step("Проверить наличие предупреждения о некорректном вводе почты")
     public void checkInvalidEmailAttention(CreditCardMtsCashback creditCardMtsCashback){
         SelenideElement attentionEmail = $(creditCardMtsCashback.getATTENTION_TEXT());
 
         assertEquals("Введите верный электронный адрес", attentionEmail.getText());
     }
 
-    @Step("Проверить отсутсвие ФИО")
+    @Step("Проверить наличие предупреждения о неполном ФИО")
     public void checkFioFullAttention(CreditCardMtsCashback creditCardMtsCashback){
         SelenideElement attentionFio = $(creditCardMtsCashback.getATTENTION_TEXT());
 
         assertEquals("Введите ФИО полностью", attentionFio.getText());
     }
 
-    @Step("Проверить отсутсвие Даты рождения")
+    @Step("Проверить наличие предупреждения об отсутствии даты рождения")
     public void checkBirthdateImportnatAttention(CreditCardMtsCashback creditCardMtsCashback){
         SelenideElement attentionBirthDate = $(creditCardMtsCashback.getATTENTION_TEXT());
 
         assertEquals("Обязательное поле", attentionBirthDate.getText());
     }
 
-    @Step("Проверить некорректный ввод номера телефона")
+    @Step("Проверить наличие предупреждения о некорректном вводе номера телефона")
     public void checkPhoneNumberIncorrectAttention(CreditCardMtsCashback creditCardMtsCashback){
         SelenideElement attentionFio = $(creditCardMtsCashback.getATTENTION_TEXT());
 
         assertEquals("Введите верный номер телефона", attentionFio.getText());
     }
 
-    @Step("Проверить отсутсвие Номера телефона")
+    @Step("Проверить наличие предупреждения об отсутствии номера телефона")
     public void checkEmptyPhoneNumberImportnatAttention(CreditCardMtsCashback creditCardMtsCashback){
         SelenideElement attentionFio = $(creditCardMtsCashback.getATTENTION_TEXT());
 
         assertEquals("Обязательное поле", attentionFio.getText());
     }
 
-    @Step("Проверить отсутсвие галочки у поля обработки персональных данных")
+    @Step("Проверить наличие предупреждения об отсутствии галочки у поля обработки персональных данных")
     public void checkInputAllowProcessingConditions(CreditCardMtsCashback creditCardMtsCashback){
         SelenideElement allowProcessingConditions = $(creditCardMtsCashback.getATTENTION_TEXT());
 

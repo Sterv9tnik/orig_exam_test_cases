@@ -3,6 +3,7 @@ import entity.User;
 import helper.BirthDates;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.qameta.allure.Description;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +16,7 @@ import steps.CreditCardMtsCashbackSteps;
 
 import static com.codeborne.selenide.Selenide.refresh;
 
+@Story("Заказ кредитной карты по заполненной анкете")
 public class CreditCardTest {
 
     CreditCardMtsCashback creditCardMtsCashback = new CreditCardMtsCashback();
@@ -39,8 +41,8 @@ public class CreditCardTest {
         refresh();
     }
 
-    @ParameterizedTest(name = "Оформить карту на имя = {0}. Позитивный сценарий.")
-    @Description("Ввести корректные данные пользователя и оформить карту.")
+    @ParameterizedTest(name = "Оформить карту при условии ФИО = {0}. Позитивный сценарий.")
+    @Description("Ввести данные пользователя и оформить карту.")
     @ValueSource(strings = {"Антонов Антон Антонович", "Антонов Антон", "Антонов-Бубонов Антон Антонович"})
     public void succesGetCreditCard(String fio){
         User user = User.Builder()
@@ -56,8 +58,8 @@ public class CreditCardTest {
     }
 
     @Test
-    @DisplayName("Оформить карту без почты. Позитивный сценарий.")
-    @Description("Ввести корректные данные пользователя, оставив поле почты пустым, и оформить карту.")
+    @DisplayName("Оформить карту при отсутсвии данных в поле Почтовый адрес. Позитивный сценарий.")
+    @Description("Ввести данные пользователя, оставить поле почты пустым и оформить карту.")
     public void succesGetCreditCardWithoutEmail(){
         User user = User.Builder()
                 .setFio("Антонов Антон Антонович")
@@ -71,8 +73,8 @@ public class CreditCardTest {
     }
 
     @Test
-    @DisplayName("Оформить карту без галочки о рекламе. Позитивный сценарий.")
-    @Description("Ввести корректные данные пользователя, снять галочку о рекламе и оформить карту.")
+    @DisplayName("Оформить карту при отсутствии галочки о рекламе. Позитивный сценарий.")
+    @Description("Ввести данные пользователя, убрать галочку о рекламе и оформить карту.")
     public void succesGetCreditCardWithoutInputInfoFromBank(){
         User user = User.Builder()
                 .setFio("Антонов Антон Антонович")
@@ -87,9 +89,9 @@ public class CreditCardTest {
         creditCardMtsCashbackSteps.checkSuccesGetCard(creditCardMtsCashback);
     }
 
-    @ParameterizedTest(name = "Оформить карту при дате рождения пользователя = {0}. Позитивный сценарий.")
-    @Description("Ввести корректные данные пользователя c датами рождения между 20 и 70 годами включительно.")
-    @EnumSource(value = BirthDates.class, names = {"TODAY_MINUS_20_YEARS", "TODAY_MINUS_35_YEARS", "TODAY_MINUS_70_YEARS"})
+    @ParameterizedTest(name = "Оформить карту при условии Дата рождения = {0}. Позитивный сценарий.")
+    @Description("Ввести данные пользователя, ввести дату рождения на проверку граничных значений (20, 70 лет).")
+    @EnumSource(value = BirthDates.class, names = {"TODAY_MINUS_20_YEARS", "TODAY_MINUS_70_YEARS"})
     public void succesGetCreditCardDateBirthBetweenTwentyAndSeventy(BirthDates birthDates){
         User user = User.Builder()
                 .setFio("Антонов Антон Антонович")
@@ -103,8 +105,8 @@ public class CreditCardTest {
     }
 
     @Test
-    @DisplayName("Оформить карту без галочки обработки персональных данных. Негативный сценарий.")
-    @Description("Ввести корректные данные пользователя, снять галочку с обработки персональных данных и оформить карту.")
+    @DisplayName("Оформить карту при отсутствии галочки обработки персональных данных. Негативный сценарий.")
+    @Description("Ввести данные пользователя, убрать галочку с обработки персональных данных и оформить карту.")
     public void failureGetCreditCardWithoutProcessingConditionsInput(){
         User user = User.Builder()
                 .setFio("Антонов Антон Антонович")
@@ -128,8 +130,8 @@ public class CreditCardTest {
     }
 
     @Test
-    @DisplayName("Оформить карту без ФИО. Негативный сценарий.")
-    @Description("Оставить пустым поле ФИО и оформить карту.")
+    @DisplayName("Оформить карту при отсутствии данных в поле ФИО. Негативный сценарий.")
+    @Description("Ввести данные пользователя, оставить пустым поле ФИО и оформить карту.")
     public void failureGetCreditCardWithoutFio(){
         User user = User.Builder()
                 .setBirthDate("01.01.1990")
@@ -143,8 +145,8 @@ public class CreditCardTest {
     }
 
     @Test
-    @DisplayName("Оформить карту без даты рождения. Негативный сценарий.")
-    @Description("Оставить пустым поле Дата рождения и оформить карту.")
+    @DisplayName("Оформить карту при отсутствии данных в поле Дата рождения. Негативный сценарий.")
+    @Description("Ввести данные пользователя, оставить пустым поле Дата рождения и оформить карту.")
     public void failureGetCreditCardWithoutBirthdate(){
         User user = User.Builder()
                 .setFio("Антонов Антон Антонович")
@@ -158,8 +160,8 @@ public class CreditCardTest {
     }
 
     @ParameterizedTest(name = "Оформить карту при условии Мобильный телефон = +7{0}. Негативный сценарий.")
-    @Description("Ввести некорректный номер в поле Мобильный телефон и оформить карту.")
-    @ValueSource(strings = {"", "11111"})
+    @Description("Ввести данные пользователя, ввести неполный номер в поле Мобильный телефон и оформить карту.")
+    @ValueSource(strings = {""})
     public void failureGetCreditCardWithoutPhoneNumber(String phoneNumber){
         User user = User.Builder()
                 .setFio("Антонов Антон Антонович")
@@ -174,8 +176,8 @@ public class CreditCardTest {
     }
 
     @Test
-    @DisplayName("Оформить карту, оставив поле Мобильный телефон пустым. Негативный сценарий.")
-    @Description("Оставить пустым поле Мобильный телефон и оформить карту.")
+    @DisplayName("Оформить карту при отсутствии данных в поле Мобильный телефон. Негативный сценарий.")
+    @Description("Ввести данные пользователя, оставить пустым поле Мобильный телефон и оформить карту.")
     public void failureGetCreditCardWithEmptyPhoneNumber(){
         User user = User.Builder()
                 .setFio("Антонов Антон Антонович")
@@ -189,7 +191,7 @@ public class CreditCardTest {
     }
 
     @ParameterizedTest(name = "Оформить карту при условии ФИО = {0}. Негативный сценарий.")
-    @Description("Ввести некорректное ФИО и оформить карту.")
+    @Description("Ввести данные пользователя, ввести ФИО латиницей, спецсимволами, цифрами и оформить карту.")
     @ValueSource(strings = {"Anton Antonow Antonowich", "Антонов Ан!тон", "Антонов Антон Антон11"})
     public void failureGetCreditCardInvalidFio(String fio){
         User user = User.Builder()
@@ -200,12 +202,13 @@ public class CreditCardTest {
                 .build();
 
         creditCardMtsCashbackSteps.sendClientData(creditCardMtsCashback, user);
+        creditCardMtsCashbackSteps.clickOnNextButton(creditCardMtsCashback);
         creditCardMtsCashbackSteps.checkFioLangAttention(creditCardMtsCashback);
     }
 
     @ParameterizedTest(name = "Оформить карту при условии Дата Рождения = {0}. Негативный сценарий.")
-    @Description("Проверка граничный значений на дату рождения, возраст человека менее 20 лет.")
-    @EnumSource(value = BirthDates.class, names = {"TODAY", "TODAY_MINUS_20_YEARS_PLUS_1_DAY"})
+    @Description("Ввести данные пользователя, ввести дату рождения, чтобы возраст клиента был менее 20 лет.")
+    @EnumSource(value = BirthDates.class, names = {"TODAY_MINUS_20_YEARS_PLUS_1_DAY"})
     public void failureGetCreditCardBirthDateLessThanTwenty(BirthDates birthDates){
         User user = User.Builder()
                 .setFio("Антонов Антон Антонович")
@@ -215,12 +218,13 @@ public class CreditCardTest {
                 .build();
 
         creditCardMtsCashbackSteps.sendClientData(creditCardMtsCashback, user);
+        creditCardMtsCashbackSteps.clickOnNextButton(creditCardMtsCashback);
         creditCardMtsCashbackSteps.checkLessThanTwentyBirthDateAttention(creditCardMtsCashback);
     }
 
     @ParameterizedTest(name = "Оформить карту при условии Дата Рождения = {0}. Негативный сценарий.")
-    @Description("Проверка граничный значений на дату рождения, возраст человека более 70 лет.")
-    @EnumSource(value = BirthDates.class, names = {"TODAY_MINUS_70_YEARS_MINUS_1_DAY", "TODAY_MINUS_100_YEARS"})
+    @Description("Ввести данные пользователя, ввести дату рождения, чтобы возраст клиента был более 70 лет.")
+    @EnumSource(value = BirthDates.class, names = {"TODAY_MINUS_70_YEARS_MINUS_1_DAY"})
     public void failureGetCreditCardBirthDateMoreThanSeventy(BirthDates birthDates){
         User user = User.Builder()
                 .setFio("Антонов Антон Антонович")
@@ -230,18 +234,19 @@ public class CreditCardTest {
                 .build();
 
         creditCardMtsCashbackSteps.sendClientData(creditCardMtsCashback, user);
+        creditCardMtsCashbackSteps.clickOnNextButton(creditCardMtsCashback);
         creditCardMtsCashbackSteps.checkMoreThanSeventyBirthDateAttention(creditCardMtsCashback);
     }
 
-    @Test
-    @DisplayName("Оформить карту при условии Электронная почта = antonovanton. Негативный сценарий")
-    @Description("Ввести некорректный почтовый адрес и оформить карту")
-    public void failureGetCreditCardInvalidDateEmail(){
+    @ParameterizedTest(name="Оформить карту при условии Электронная почта = {0}. Негативный сценарий")
+    @Description("Ввести данные пользователя, ввести неполный почтовый адрес и оформить карту")
+    @ValueSource(strings = {"antonovanton"})
+    public void failureGetCreditCardInvalidDateEmail(String email){
         User user = User.Builder()
                 .setFio("Антонов Антон Антонович")
                 .setBirthDate("01.01.1990")
                 .setPhoneNumber("7777777777")
-                .setEmail("antonovanton")
+                .setEmail(email)
                 .build();
 
         creditCardMtsCashbackSteps.sendClientData(creditCardMtsCashback, user);
